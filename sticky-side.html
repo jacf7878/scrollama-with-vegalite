@@ -71,6 +71,48 @@
         padding: 1rem;
         font-size: 1.5rem;
       }
+
+      #vis div {
+          margin-top: 25px;
+          font-size: 21px;
+          text-align: center;
+          animation: fadein 2s;
+          -moz-animation: fadein 2s; /* Firefox */
+          -webkit-animation: fadein 2s; /* Safari and Chrome */
+          -o-animation: fadein 2s; /* Opera */
+      }
+      @keyframes fadein {
+          from {
+              opacity:0;
+          }
+          to {
+              opacity:1;
+          }
+      }
+      @-moz-keyframes fadein { /* Firefox */
+          from {
+              opacity:0;
+          }
+          to {
+              opacity:1;
+          }
+      }
+      @-webkit-keyframes fadein { /* Safari and Chrome */
+          from {
+              opacity:0;
+          }
+          to {
+              opacity:1;
+          }
+      }
+      @-o-keyframes fadein { /* Opera */
+          from {
+              opacity:0;
+          }
+          to {
+              opacity: 1;
+          }
+      }
     </style>
     <script src="https://unpkg.com/intersection-observer@0.5.1/intersection-observer.js"></script>
     <script src="https://unpkg.com/scrollama"></script>
@@ -187,20 +229,20 @@
           width: 600,
           height: 400,
           data: {
-            url: 'https://raw.githubusercontent.com/alexlopespereira/enapespcd2021/main/data/originais/aquecimento_global/global_temperature_anomalies_tratado.csv',
+            url: 'data/global_temperature_anomalies_tratado.csv',
             format: {type: 'csv'}
           },
           mark: "line",
           encoding: {
-            x: {timeUnit: "month", field: "data1"},
-            y: {field: "Anomaly", type: "quantitative"},
+            x:{timeUnit:"month",field:"data1",axis:{grid:false}},
+            y:{field:"Anomaly",type:"quantitative",axis:{grid:false}},
             color: {field: "ano", type: "ordinal", scale: {scheme: "turbo"}}
           }
       };
 
-      var yourVlSpec2 = {$schema:"https://vega.github.io/schema/vega-lite/v5.json",data:{url:"https://raw.githubusercontent.com/alexlopespereira/enapespcd2021/main/data/originais/aquecimento_global/global_temperature_anomalies_tratado.csv",format:{type:"csv"}},transform:[{calculate:"random()",as:"random"}],height:400,width:600,mark:"point",encoding:{x:{field:"data1",timeUnit:"month",type:"ordinal"},y:{field:"Anomaly",type:"quantitative"},xOffset:{field:"random",type:"quantitative"}}};
-      var yourVlSpec3 = {$schema:"https://vega.github.io/schema/vega-lite/v5.json",data:{url:"https://raw.githubusercontent.com/alexlopespereira/enapespcd2021/main/data/originais/aquecimento_global/global_temperature_anomalies_tratado.csv",format:{type:"csv"}},width:600,height:400,layer:[{mark:"line",encoding:{x:{timeUnit:"month",field:"data1"},y:{field:"Anomaly",type:"quantitative",aggregate:"mean"}}},{mark:{type:"errorband",extent:"stdev"},encoding:{x:{timeUnit:"month",field:"data1"},y:{field:"Anomaly",type:"quantitative"}}}]};
-      var yourVlSpec4 = {$schema:"https://vega.github.io/schema/vega-lite/v5.json",data:{url:"https://raw.githubusercontent.com/alexlopespereira/enapespcd2021/main/data/originais/aquecimento_global/temperature_anomalies_co2.csv",format:{type:"csv"}},width:600,height:400,layer:[{mark:"point",transform:[{filter:{field:"mes",equal:"jun"}}],encoding:{x:{field:"co2",type:"quantitative"},y:{field:"Anomaly",type:"quantitative"}}},{mark:{type:"line",color:"red"},transform:[{filter:{field:"mes",equal:"jun"}},{regression:"Anomaly",on:"co2"}],encoding:{x:{field:"co2",type:"quantitative"},y:{field:"Anomaly",type:"quantitative"}}}]};
+      var yourVlSpec2 = {$schema:"https://vega.github.io/schema/vega-lite/v5.json",data:{url:"data/global_temperature_anomalies_tratado.csv",format:{type:"csv"}},transform:[{calculate:"random()",as:"random"}],height:400,width:600,mark:"point",encoding:{x:{field:"data1",timeUnit:"month",type:"ordinal"},y:{field:"Anomaly",type:"quantitative",axis:{grid:false}},xOffset:{field:"random",type:"quantitative"}}};
+      var yourVlSpec3 = {$schema:"https://vega.github.io/schema/vega-lite/v5.json",data:{url:"data/global_temperature_anomalies_tratado.csv",format:{type:"csv"}},width:600,height:400,layer:[{mark:"line",encoding:{x:{timeUnit:"month",field:"data1"},y:{field:"Anomaly",type:"quantitative",aggregate:"mean"}}},{mark:{type:"errorband",extent:"stdev"},encoding:{x:{timeUnit:"month",field:"data1",axis:{grid:false}},y:{field:"Anomaly",type:"quantitative",axis:{grid:false}}}}]};
+      var yourVlSpec4 = {$schema:"https://vega.github.io/schema/vega-lite/v5.json",data:{url:"data/temperature_anomalies_co2.csv",format:{type:"csv"}},width:600,height:400,layer:[{mark:"point",transform:[{filter:{field:"mes",equal:"jun"}}],encoding:{x:{field:"co2",type:"quantitative"},y:{field:"Anomaly",type:"quantitative"}}},{mark:{type:"line",color:"red"},transform:[{filter:{field:"mes",equal:"jun"}},{regression:"Anomaly",on:"co2"}],encoding:{x:{field:"co2",type:"quantitative",axis:{grid:false}},y:{field:"Anomaly",type:"quantitative",axis:{grid:false}}}}]};
     </script>
   </body>
 </html>
