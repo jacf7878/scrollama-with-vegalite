@@ -45,6 +45,7 @@
 
       .step {
         margin: 0 auto 2rem auto;
+        margin-bottom: 15rem;
         color: #fff;
         background-color: rgba(0, 0, 0, 0.1);
       }
@@ -54,7 +55,7 @@
       }
 
       .step.is-active p {
-        background-color: goldenrod;
+        background-color: #daa520a8;
         color: #3b3b3b;
       }
 
@@ -65,6 +66,9 @@
         background-color: #3b3b3b;
       }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.21.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.2.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.20.2"></script>
   </head>
 
   <body>
@@ -80,29 +84,30 @@
         </div>
       </nav>
       <section id="intro">
-        <h1 class="intro__hed">Sticky Overlay Example</h1>
+        <h1 class="intro__hed">Análise da variação de temperatura global</h1>
+        <a href="https://www.youtube.com/watch?v=AQJZaVPUdj0" target="_blank"> <img src="images/iceberg.webp"> </a>
         <p class="intro__dek">
-          Start scrolling to see how it works.
+          Está ficando mais quente, não é só impressão.
         </p>
       </section>
 
       <section id="scrolly">
         <div class="sticky-thing">
-          <p>0</p>
+          <div id="vis"></div>
         </div>
 
         <article>
           <div class="step" data-step="1">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p>A anomalia de temperatura é a medida do desvio da temperatura média global em relação à média observada entre 1951-1980. Perceba que a temperatura média global está numa tendência de elevação.</p>
           </div>
           <div class="step" data-step="2">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p>Pode-se perceber, por esse diagrama de pontos, que a distribuição das anomalias não é simétrica em relação a média. A cauda acima da média é maior do que a cauda abaixo da média.</p>
           </div>
           <div class="step" data-step="3">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p>O desvio padrão, representado pela área hachurada em torno da curva da temperatura média, já mostra uma variação significativa em relação à média.</p>
           </div>
           <div class="step" data-step="4">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p>Este gráfico apresenta a relação quantitativa entre o anomalia de temperatura (desvio em relação à média) e a quantidade de CO2 emitido na atmosfera. Os ambientalistas argumentam que este é o principal fator de causalidade do aquecimento global.</p>
           </div>
         </article>
       </section>
@@ -135,7 +140,19 @@
         el.classList.add('is-active');
 
         // update graphic based on step
-        sticky.querySelector("p").innerText = el.dataset.step;
+        // sticky.querySelector("p").innerText = el.dataset.step;
+        if(el.dataset.step=='1') {
+          vegaEmbed('#vis', yourVlSpec1);
+        }
+        else if (el.dataset.step=='2'){
+          vegaEmbed('#vis', yourVlSpec2);
+        }
+        else if (el.dataset.step=='3'){
+          vegaEmbed('#vis', yourVlSpec3);
+        }
+        else if (el.dataset.step=='4'){
+          vegaEmbed('#vis', yourVlSpec4);
+        }
       }
 
       function init() {
@@ -156,6 +173,28 @@
 
       // kick things off
       init();
+    </script>
+
+  <script type="text/javascript">
+      var yourVlSpec1 = {
+          $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
+          width: 600,
+          height: 400,
+          data: {
+            url: 'https://raw.githubusercontent.com/alexlopespereira/enapespcd2021/main/data/originais/aquecimento_global/global_temperature_anomalies_tratado.csv',
+            format: {type: 'csv'}
+          },
+          mark: "line",
+          encoding: {
+            x: {timeUnit: "month", field: "data1"},
+            y: {field: "Anomaly", type: "quantitative"},
+            color: {field: "ano", type: "ordinal", scale: {scheme: "turbo"}}
+          }
+      };
+
+      var yourVlSpec2 = {$schema:"https://vega.github.io/schema/vega-lite/v5.json",data:{url:"https://raw.githubusercontent.com/alexlopespereira/enapespcd2021/main/data/originais/aquecimento_global/global_temperature_anomalies_tratado.csv",format:{type:"csv"}},transform:[{calculate:"random()",as:"random"}],height:400,width:600,mark:"point",encoding:{x:{field:"data1",timeUnit:"month",type:"ordinal"},y:{field:"Anomaly",type:"quantitative"},xOffset:{field:"random",type:"quantitative"}}};
+      var yourVlSpec3 = {$schema:"https://vega.github.io/schema/vega-lite/v5.json",data:{url:"https://raw.githubusercontent.com/alexlopespereira/enapespcd2021/main/data/originais/aquecimento_global/global_temperature_anomalies_tratado.csv",format:{type:"csv"}},width:600,height:400,layer:[{mark:"line",encoding:{x:{timeUnit:"month",field:"data1"},y:{field:"Anomaly",type:"quantitative",aggregate:"mean"}}},{mark:{type:"errorband",extent:"stdev"},encoding:{x:{timeUnit:"month",field:"data1"},y:{field:"Anomaly",type:"quantitative"}}}]};
+      var yourVlSpec4 = {$schema:"https://vega.github.io/schema/vega-lite/v5.json",data:{url:"https://raw.githubusercontent.com/alexlopespereira/enapespcd2021/main/data/originais/aquecimento_global/temperature_anomalies_co2.csv",format:{type:"csv"}},width:600,height:400,layer:[{mark:"point",transform:[{filter:{field:"mes",equal:"jun"}}],encoding:{x:{field:"co2",type:"quantitative"},y:{field:"Anomaly",type:"quantitative"}}},{mark:{type:"line",color:"red"},transform:[{filter:{field:"mes",equal:"jun"}},{regression:"Anomaly",on:"co2"}],encoding:{x:{field:"co2",type:"quantitative"},y:{field:"Anomaly",type:"quantitative"}}}]};
     </script>
   </body>
 </html>
